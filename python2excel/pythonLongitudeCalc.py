@@ -10,7 +10,7 @@ con = MySQLdb.connect(host='192.168.72.131', user='root', passwd='centos', db='d
 cur = con.cursor()
 
 # 类似于其他语言的 query 函数， execute 是 python 中的执行查询函数
-cur.execute("SELECT * FROM test5")
+cur.execute("SELECT * FROM test6")
 
 # 使用 fetchall 函数，将结果集（多维元组）存入 rows 里面
 rows = cur.fetchall()
@@ -25,20 +25,28 @@ for row in rows:
     # 这里，可以使用键值对的方法，由键名字来获取数据
     # print "%s %s" % (row["user_id"], row["user_name"])
    # print("id=%s,stream_name=%s,download_url=%s,size=%s,status=%d,createAt=%s" % (id, stream_name, download_url, size, status, createAt))
-    s=(row[4])
-    ab=s.split(',')
-    print(ab)
-    print(ab[0])
-    print(ab[-1])
-    print(row[0])
+    c=float(row[8])/60
+    b=(float(row[7])+c)/60
+    a=float(row[6])+b
+    jd=str(a)
+    print(jd)
+
+    c=float(row[11])/60
+    b=(float(row[10])+c)/60
+    a=float(row[9])+b
+
+    wd=str(a)
+    print(wd)
+    print(row[1])
+
     try:
-        cur.execute("UPDATE test5 SET longitude='%s',latitude='%s'  WHERE camera_name = '%s' " % (ab[0],ab[-1],row[0]))
+        cur.execute("UPDATE test6 SET longitude='%s',latitude='%s'  WHERE camera_name = '%s' " % (jd,wd,row[1]))
         # print("longitude=%s" % (row[4]))
         # 提交到数据库执行
         con.commit()
     except:
    # 发生错误时回滚
-        con.rollback()
+       con.rollback()
 
         # 关闭数据库连接
 con.close()
